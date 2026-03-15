@@ -1,1167 +1,300 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Home Automation | Velammal Engineering College</title>
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary: #1a237e;
-            --secondary: #c62828;
-            --accent: #ffd700;
-            --dark: #0d1b2a;
-            --light: #ffffff;
-            --gradient1: linear-gradient(135deg, #1a237e 0%, #283593 50%, #3949ab 100%);
-            --gradient2: linear-gradient(135deg, #c62828 0%, #d32f2f 100%);
-            --glass: rgba(255, 255, 255, 0.1);
-            --glass-border: rgba(255, 255, 255, 0.2);
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: var(--gradient1);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* Animated Background */
-        .bg-animation {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            overflow: hidden;
-        }
-
-        .bg-animation span {
-            position: absolute;
-            display: block;
-            width: 20px;
-            height: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            animation: move 25s infinite;
-            bottom: -150px;
-            border-radius: 50%;
-        }
-
-        .bg-animation span:nth-child(1) { left: 10%; width: 80px; height: 80px; animation-delay: 0s; }
-        .bg-animation span:nth-child(2) { left: 20%; width: 20px; height: 20px; animation-delay: 2s; animation-duration: 12s; }
-        .bg-animation span:nth-child(3) { left: 25%; width: 20px; height: 20px; animation-delay: 4s; }
-        .bg-animation span:nth-child(4) { left: 40%; width: 60px; height: 60px; animation-delay: 0s; animation-duration: 18s; }
-        .bg-animation span:nth-child(5) { left: 65%; width: 20px; height: 20px; animation-delay: 0s; }
-        .bg-animation span:nth-child(6) { left: 75%; width: 110px; height: 110px; animation-delay: 3s; }
-        .bg-animation span:nth-child(7) { left: 35%; width: 150px; height: 150px; animation-delay: 7s; }
-        .bg-animation span:nth-child(8) { left: 50%; width: 25px; height: 25px; animation-delay: 15s; animation-duration: 45s; }
-        .bg-animation span:nth-child(9) { left: 85%; width: 15px; height: 15px; animation-delay: 2s; animation-duration: 35s; }
-        .bg-animation span:nth-child(10) { left: 90%; width: 150px; height: 150px; animation-delay: 0s; animation-duration: 11s; }
-
-        @keyframes move {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-1000px) rotate(720deg); opacity: 0; }
-        }
-
-        /* Header */
-        .header {
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--glass-border);
-            padding: 15px 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .header-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .college-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .college-logo {
-            width: 70px;
-            height: 70px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--primary);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-            border: 3px solid var(--accent);
-        }
-
-        .college-details h1 {
-            color: var(--accent);
-            font-size: 1.4em;
-            font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .college-details p {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 0.85em;
-        }
-
-        .project-title {
-            text-align: right;
-        }
-
-        .project-title h2 {
-            color: white;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.3em;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .project-title h2 i {
-            color: var(--accent);
-            animation: pulse 2s infinite;
-        }
-
-        .project-title p {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.75em;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-        }
-
-        /* Status Bar */
-        .status-bar {
-            max-width: 1400px;
-            margin: 20px auto;
-            padding: 0 20px;
-        }
-
-        .status-container {
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 15px;
-            padding: 15px 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .status-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: white;
-        }
-
-        .status-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            animation: blink 1.5s infinite;
-        }
-
-        .status-dot.connected { background: #4caf50; box-shadow: 0 0 10px #4caf50; }
-        .status-dot.disconnected { background: #f44336; box-shadow: 0 0 10px #f44336; }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        /* Main Container */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        /* Grid Layout */
-        .main-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 25px;
-            margin-bottom: 30px;
-        }
-
-        /* Cards */
-        .card {
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 25px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: 0.5s;
-        }
-
-        .card:hover::before {
-            left: 100%;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            border-color: var(--accent);
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid var(--glass-border);
-        }
-
-        .card-icon {
-            width: 50px;
-            height: 50px;
-            background: var(--gradient2);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5em;
-            color: white;
-            box-shadow: 0 5px 15px rgba(198, 40, 40, 0.4);
-        }
-
-        .card-title {
-            color: white;
-            font-size: 1.3em;
-            font-weight: 600;
-        }
-
-        /* Device Items */
-        .device-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 18px 20px;
-            margin: 12px 0;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .device-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateX(5px);
-        }
-
-        .device-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .device-icon {
-            width: 45px;
-            height: 45px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3em;
-            transition: all 0.3s ease;
-        }
-
-        .device-icon.light { background: linear-gradient(135deg, #ffd54f, #ffb300); color: #333; }
-        .device-icon.fan { background: linear-gradient(135deg, #4fc3f7, #0288d1); color: white; }
-        .device-icon.socket { background: linear-gradient(135deg, #81c784, #388e3c); color: white; }
-
-        .device-name {
-            color: white;
-            font-weight: 500;
-            font-size: 1.05em;
-        }
-
-        .device-status {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 0.8em;
-        }
-
-        /* Toggle Switch */
-        .switch {
-            position: relative;
-            width: 70px;
-            height: 35px;
-        }
-
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(255, 255, 255, 0.2);
-            transition: 0.4s;
-            border-radius: 35px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 27px;
-            width: 27px;
-            left: 2px;
-            bottom: 2px;
-            background: white;
-            transition: 0.4s;
-            border-radius: 50%;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-        }
-
-        input:checked + .slider {
-            background: linear-gradient(135deg, #4caf50, #2e7d32);
-            border-color: #4caf50;
-            box-shadow: 0 0 20px rgba(76, 175, 80, 0.5);
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(35px);
-        }
-
-        /* Auto Mode Card */
-        .auto-card {
-            background: linear-gradient(135deg, rgba(198, 40, 40, 0.3), rgba(26, 35, 126, 0.3));
-            border: 2px solid var(--accent);
-        }
-
-        .auto-features {
-            margin-top: 20px;
-            padding: 15px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 12px;
-        }
-
-        .auto-features ul {
-            list-style: none;
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        .auto-features li {
-            padding: 8px 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .auto-features li:last-child {
-            border-bottom: none;
-        }
-
-        .auto-features li i {
-            color: var(--accent);
-        }
-
-        /* Quick Actions */
-        .quick-actions {
-            display: grid;
-            gap: 15px;
-        }
-
-        .action-btn {
-            padding: 15px 25px;
-            border: none;
-            border-radius: 12px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .action-btn.primary {
-            background: linear-gradient(135deg, #4caf50, #2e7d32);
-            color: white;
-            box-shadow: 0 5px 20px rgba(76, 175, 80, 0.4);
-        }
-
-        .action-btn.danger {
-            background: linear-gradient(135deg, #f44336, #c62828);
-            color: white;
-            box-shadow: 0 5px 20px rgba(244, 67, 54, 0.4);
-        }
-
-        .action-btn.secondary {
-            background: linear-gradient(135deg, #2196f3, #1565c0);
-            color: white;
-            box-shadow: 0 5px 20px rgba(33, 150, 243, 0.4);
-        }
-
-        .action-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        .action-btn:active {
-            transform: translateY(0);
-        }
-
-        /* Footer */
-        .footer {
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border-top: 1px solid var(--glass-border);
-            padding: 25px;
-            margin-top: 30px;
-            text-align: center;
-        }
-
-        .footer-content {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        .footer h3 {
-            color: var(--accent);
-            font-size: 1.2em;
-        }
-
-        .footer p {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.9em;
-            margin: 5px 0;
-        }
-
-        .footer-links {
-            margin-top: 15px;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .footer-links a {
-            color: rgba(255, 255, 255, 0.7);
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .footer-links a:hover {
-            color: var(--accent);
-        }
-
-        .team-info {
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid var(--glass-border);
-        }
-
-        .team-info h4 {
-            color: var(--accent);
-            margin-bottom: 10px;
-        }
-
-        .team-members {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        /* Alerts */
-        .alert-container {
-            position: fixed;
-            top: 100px;
-            right: 20px;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .alert {
-            padding: 15px 25px;
-            border-radius: 12px;
-            color: white;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            animation: slideIn 0.3s ease;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        .alert-success { background: linear-gradient(135deg, #4caf50, #2e7d32); }
-        .alert-warning { background: linear-gradient(135deg, #ff9800, #f57c00); }
-        .alert-danger { background: linear-gradient(135deg, #f44336, #c62828); }
-        .alert-info { background: linear-gradient(135deg, #2196f3, #1565c0); }
-
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        @keyframes slideOut {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(100%); opacity: 0; }
-        }
-
-        /* Loading Overlay */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--dark);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
-            transition: opacity 0.5s;
-        }
-
-        .loading-overlay.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .loader {
-            width: 80px;
-            height: 80px;
-            border: 5px solid rgba(255, 255, 255, 0.1);
-            border-top-color: var(--accent);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .loading-text {
-            color: white;
-            margin-top: 20px;
-            font-size: 1.2em;
-        }
-
-        /* Live Clock */
-        .live-clock {
-            font-family: 'Orbitron', sans-serif;
-            color: var(--accent);
-            font-size: 1.1em;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header-content {
-                justify-content: center;
-                text-align: center;
-            }
-
-            .college-info {
-                flex-direction: column;
-            }
-
-            .project-title {
-                text-align: center;
-            }
-
-            .main-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .college-details h1 {
-                font-size: 1.1em;
-            }
-
-            .team-members {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .status-container {
-                justify-content: center;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Velammal Engineering College - Home Automation</title>
+  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #050816, #0b1229, #0f1f45);
+      color: #eaf2ff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1100px;
+      background: rgba(10, 18, 40, 0.88);
+      border: 1px solid rgba(100, 149, 237, 0.25);
+      border-radius: 24px;
+      box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    .header {
+      padding: 28px 24px;
+      text-align: center;
+      background: linear-gradient(90deg, rgba(8,28,70,0.95), rgba(14,55,130,0.95));
+      border-bottom: 1px solid rgba(120, 180, 255, 0.25);
+    }
+
+    .header h1 {
+      font-size: 2rem;
+      color: #ffffff;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      color: #a9c8ff;
+      font-size: 1rem;
+    }
+
+    .status-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      padding: 16px;
+      background: rgba(7, 17, 38, 0.95);
+      border-bottom: 1px solid rgba(120, 180, 255, 0.15);
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: orange;
+      box-shadow: 0 0 10px orange;
+    }
+
+    .status-text {
+      font-weight: 600;
+      color: #d9e8ff;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 22px;
+      padding: 28px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(12,24,55,0.95), rgba(8,16,35,0.95));
+      border: 1px solid rgba(76, 146, 255, 0.25);
+      border-radius: 18px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: inset 0 0 20px rgba(0, 102, 255, 0.07), 0 0 18px rgba(0, 80, 180, 0.08);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 0 22px rgba(0, 140, 255, 0.18);
+    }
+
+    .device-title {
+      font-size: 1.2rem;
+      margin-bottom: 14px;
+      color: #ffffff;
+    }
+
+    .state {
+      margin-bottom: 18px;
+      font-size: 1rem;
+      color: #9dc2ff;
+      font-weight: 600;
+    }
+
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      outline: none;
+      padding: 12px 22px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      min-width: 90px;
+    }
+
+    .on-btn {
+      background: linear-gradient(90deg, #0b84ff, #33a1ff);
+      color: white;
+      box-shadow: 0 0 14px rgba(0, 140, 255, 0.25);
+    }
+
+    .on-btn:hover {
+      background: linear-gradient(90deg, #1990ff, #58b4ff);
+      transform: scale(1.04);
+    }
+
+    .off-btn {
+      background: linear-gradient(90deg, #1b2947, #243b69);
+      color: #dce9ff;
+      border: 1px solid rgba(102, 163, 255, 0.2);
+    }
+
+    .off-btn:hover {
+      background: linear-gradient(90deg, #263f71, #315291);
+      transform: scale(1.04);
+    }
+
+    .footer {
+      text-align: center;
+      padding: 18px;
+      color: #88aee8;
+      border-top: 1px solid rgba(120, 180, 255, 0.12);
+      background: rgba(6, 14, 32, 0.9);
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 600px) {
+      .header h1 {
+        font-size: 1.4rem;
+      }
+
+      .grid {
+        padding: 18px;
+        gap: 16px;
+      }
+
+      button {
+        width: 100%;
+      }
+
+      .btn-group {
+        flex-direction: column;
+      }
+    }
+  </style>
 </head>
 <body>
-    <!-- Loading Overlay -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loader"></div>
-        <p class="loading-text">Connecting to Smart Home System...</p>
+  <div class="container">
+    <div class="header">
+      <h1>Velammal Engineering College</h1>
+      <p>Home Automation Control Panel</p>
     </div>
 
-    <!-- Animated Background -->
-    <div class="bg-animation">
-        <span></span><span></span><span></span><span></span><span></span>
-        <span></span><span></span><span></span><span></span><span></span>
-    </div>
-
-    <!-- Alert Container -->
-    <div class="alert-container" id="alertContainer"></div>
-
-    <!-- Header -->
-    <header class="header">
-        <div class="header-content">
-            <div class="college-info">
-                <div class="college-logo">
-                    <i class="fas fa-graduation-cap"></i>
-                </div>
-                <div class="college-details">
-                    <h1>VELAMMAL ENGINEERING COLLEGE</h1>
-                    <p>📍 Chennai, Tamil Nadu | Affiliated to Anna University</p>
-                    <p>🎓 Department of Electronics & Communication Engineering</p>
-                </div>
-            </div>
-            <div class="project-title">
-                <h2><i class="fas fa-home"></i> IoT Smart Home</h2>
-                <p>Final Year Project | 2024-2025</p>
-                <p class="live-clock" id="liveClock"></p>
-            </div>
-        </div>
-    </header>
-
-    <!-- Status Bar -->
     <div class="status-bar">
-        <div class="status-container">
-            <div class="status-item">
-                <span class="status-dot" id="connectionDot"></span>
-                <span id="connectionText">Connecting...</span>
-            </div>
-            <div class="status-item">
-                <i class="fas fa-wifi" style="color: var(--accent);"></i>
-                <span>ESP32 Status: <strong id="espStatus">Checking...</strong></span>
-            </div>
-            <div class="status-item">
-                <i class="fas fa-clock" style="color: var(--accent);"></i>
-                <span>Last Update: <strong id="lastUpdate">--</strong></span>
-            </div>
-            <div class="status-item">
-                <i class="fas fa-microchip" style="color: var(--accent);"></i>
-                <span>Devices Active: <strong id="activeDevices">0/4</strong></span>
-            </div>
-        </div>
+      <div class="dot" id="statusDot"></div>
+      <div class="status-text" id="connectionStatus">Connecting to MQTT...</div>
     </div>
 
-    <!-- Main Container -->
-    <div class="container">
-        <div class="main-grid">
-            
-            <!-- Device Control Card -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <i class="fas fa-plug"></i>
-                    </div>
-                    <h3 class="card-title">Device Control</h3>
-                </div>
-
-                <!-- Light 1 -->
-                <div class="device-item">
-                    <div class="device-info">
-                        <div class="device-icon light">
-                            <i class="fas fa-lightbulb"></i>
-                        </div>
-                        <div>
-                            <div class="device-name">Light 1</div>
-                            <div class="device-status" id="light1Status">OFF</div>
-                        </div>
-                    </div>
-                    <label class="switch">
-                        <input type="checkbox" id="light1Toggle" onchange="toggleDevice('light1', this.checked)">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-
-                <!-- Light 2 -->
-                <div class="device-item">
-                    <div class="device-info">
-                        <div class="device-icon light">
-                            <i class="fas fa-lightbulb"></i>
-                        </div>
-                        <div>
-                            <div class="device-name">Light 2</div>
-                            <div class="device-status" id="light2Status">OFF</div>
-                        </div>
-                    </div>
-                    <label class="switch">
-                        <input type="checkbox" id="light2Toggle" onchange="toggleDevice('light2', this.checked)">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-
-                <!-- Fan -->
-                <div class="device-item">
-                    <div class="device-info">
-                        <div class="device-icon fan">
-                            <i class="fas fa-fan" id="fanIcon"></i>
-                        </div>
-                        <div>
-                            <div class="device-name">Ceiling Fan</div>
-                            <div class="device-status" id="fanStatus">OFF</div>
-                        </div>
-                    </div>
-                    <label class="switch">
-                        <input type="checkbox" id="fanToggle" onchange="toggleDevice('fan', this.checked)">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-
-                <!-- Socket -->
-                <div class="device-item">
-                    <div class="device-info">
-                        <div class="device-icon socket">
-                            <i class="fas fa-plug"></i>
-                        </div>
-                        <div>
-                            <div class="device-name">Power Socket</div>
-                            <div class="device-status" id="socketStatus">OFF</div>
-                        </div>
-                    </div>
-                    <label class="switch">
-                        <input type="checkbox" id="socketToggle" onchange="toggleDevice('socket', this.checked)">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-            </div>
-
-            <!-- Quick Actions Card -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <i class="fas fa-bolt"></i>
-                    </div>
-                    <h3 class="card-title">Quick Actions</h3>
-                </div>
-
-                <div class="quick-actions">
-                    <button class="action-btn primary" onclick="allDevices(true)">
-                        <i class="fas fa-power-off"></i> Turn All ON
-                    </button>
-                    <button class="action-btn danger" onclick="allDevices(false)">
-                        <i class="fas fa-power-off"></i> Turn All OFF
-                    </button>
-                    <button class="action-btn secondary" onclick="refreshData()">
-                        <i class="fas fa-sync-alt"></i> Refresh Data
-                    </button>
-                    <button class="action-btn secondary" onclick="showSystemInfo()">
-                        <i class="fas fa-info-circle"></i> System Info
-                    </button>
-                </div>
-
-                <!-- Project Info Box -->
-                <div style="margin-top: 25px; padding: 20px; background: rgba(255,215,0,0.1); border-radius: 15px; border: 1px solid var(--accent);">
-                    <h4 style="color: var(--accent); margin-bottom: 10px;">
-                        <i class="fas fa-microchip"></i> System Components
-                    </h4>
-                    <ul style="list-style: none; color: rgba(255,255,255,0.9); font-size: 0.9em;">
-                        <li style="padding: 5px 0;"><i class="fas fa-check" style="color: #4caf50; margin-right: 10px;"></i> ESP32 Microcontroller</li>
-                        <li style="padding: 5px 0;"><i class="fas fa-check" style="color: #4caf50; margin-right: 10px;"></i> 4-Channel Relay Module</li>
-                        <li style="padding: 5px 0;"><i class="fas fa-check" style="color: #4caf50; margin-right: 10px;"></i> 4 Push Buttons (Manual Control)</li>
-                        <li style="padding: 5px 0;"><i class="fas fa-check" style="color: #4caf50; margin-right: 10px;"></i> Firebase Realtime Database</li>
-                        <li style="padding: 5px 0;"><i class="fas fa-check" style="color: #4caf50; margin-right: 10px;"></i> Web Dashboard Interface</li>
-                    </ul>
-                </div>
-            </div>
-
+    <div class="grid">
+      <div class="card">
+        <div class="device-title">Relay 1</div>
+        <div class="state" id="state1">Status: Unknown</div>
+        <div class="btn-group">
+          <button class="on-btn" onclick="sendCommand(1, 'ON')">ON</button>
+          <button class="off-btn" onclick="sendCommand(1, 'OFF')">OFF</button>
         </div>
+      </div>
+
+      <div class="card">
+        <div class="device-title">Relay 2</div>
+        <div class="state" id="state2">Status: Unknown</div>
+        <div class="btn-group">
+          <button class="on-btn" onclick="sendCommand(2, 'ON')">ON</button>
+          <button class="off-btn" onclick="sendCommand(2, 'OFF')">OFF</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="device-title">Relay 3</div>
+        <div class="state" id="state3">Status: Unknown</div>
+        <div class="btn-group">
+          <button class="on-btn" onclick="sendCommand(3, 'ON')">ON</button>
+          <button class="off-btn" onclick="sendCommand(3, 'OFF')">OFF</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="device-title">Relay 4</div>
+        <div class="state" id="state4">Status: Unknown</div>
+        <div class="btn-group">
+          <button class="on-btn" onclick="sendCommand(4, 'ON')">ON</button>
+          <button class="off-btn" onclick="sendCommand(4, 'OFF')">OFF</button>
+        </div>
+      </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-logo">
-                <div class="college-logo" style="width: 50px; height: 50px; font-size: 18px;">
-                    <i class="fas fa-graduation-cap"></i>
-                </div>
-                <h3>Velammal Engineering College</h3>
-            </div>
-            <p>Ambattur-Red Hills Road, Chennai - 600 066</p>
-            <p>📞 Phone: 044-2655 2123 | 📧 Email: info@velammal.edu.in</p>
-            
-            <div class="footer-links">
-                <a href="https://www.velammal.edu.in" target="_blank">
-                    <i class="fas fa-globe"></i> Website
-                </a>
-                <a href="#"><i class="fas fa-file-pdf"></i> Project Report</a>
-                <a href="#"><i class="fab fa-github"></i> Source Code</a>
-            </div>
+    <div class="footer">
+      Secure MQTT Home Automation Dashboard
+    </div>
+  </div>
 
-            <div class="team-info">
-                <h4>🎓 Project Team</h4>
-                <div class="team-members">
-                    <span><i class="fas fa-user-graduate"></i> Student Name 1</span>
-                    <span><i class="fas fa-user-graduate"></i> Student Name 2</span>
-                    <span><i class="fas fa-user-graduate"></i> Student Name 3</span>
-                    <span><i class="fas fa-user-graduate"></i> Student Name 4</span>
-                </div>
-                <p style="margin-top: 15px;">
-                    <i class="fas fa-chalkboard-teacher"></i> 
-                    Guide: <strong>Prof. Guide Name</strong> | Department of ECE
-                </p>
-            </div>
+  <script>
+    const brokerUrl = "wss://k6157600.ala.us-east-1.emqxsl.com:8084/mqtt";
 
-            <p style="margin-top: 20px; opacity: 0.7;">
-                © 2024-2025 Velammal Engineering College. All Rights Reserved.
-            </p>
-            <p style="opacity: 0.5; font-size: 0.8em;">
-                IoT Based Home Automation System | Made with ❤️ using ESP32 & Firebase
-            </p>
-        </div>
-    </footer>
+    const options = {
+      username: "girish123",
+      password: "girish123",
+      clean: true,
+      connectTimeout: 4000,
+      clientId: "webclient_" + Math.random().toString(16).substr(2, 8),
+      reconnectPeriod: 2000
+    };
 
-    <!-- Firebase SDK -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, set, onValue, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    const client = mqtt.connect(brokerUrl, options);
 
-        // Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyDh5fpbfVxFRG0A0QKvg2HnboooAU_QaQk",
-            authDomain: "home-automation-2aa42.firebaseapp.com",
-            projectId: "home-automation-2aa42",
-            storageBucket: "home-automation-2aa42.firebasestorage.app",
-            messagingSenderId: "124512289380",
-            appId: "1:124512289380:web:9b6d5e81a1d29b83ad1571",
-            measurementId: "G-790RLSHQSD",
-            databaseURL: "https://home-automation-2aa42-default-rtdb.firebaseio.com"
-        };
+    const connectionStatus = document.getElementById("connectionStatus");
+    const statusDot = document.getElementById("statusDot");
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
+    client.on("connect", () => {
+      connectionStatus.textContent = "Connected to MQTT Broker";
+      statusDot.style.background = "#00ff99";
+      statusDot.style.boxShadow = "0 0 10px #00ff99";
 
-        // Make functions globally available
-        window.toggleDevice = toggleDevice;
-        window.allDevices = allDevices;
-        window.refreshData = refreshData;
-        window.showSystemInfo = showSystemInfo;
+      client.subscribe("home/relay1/state");
+      client.subscribe("home/relay2/state");
+      client.subscribe("home/relay3/state");
+      client.subscribe("home/relay4/state");
+    });
 
-        let isConnected = false;
+    client.on("reconnect", () => {
+      connectionStatus.textContent = "Reconnecting...";
+      statusDot.style.background = "orange";
+      statusDot.style.boxShadow = "0 0 10px orange";
+    });
 
-        // ═══════════════════════════════════════════════
-        // CONNECTION STATUS
-        // ═══════════════════════════════════════════════
-        function updateConnectionStatus(status) {
-            isConnected = status;
-            const dot = document.getElementById('connectionDot');
-            const text = document.getElementById('connectionText');
-            const espStatus = document.getElementById('espStatus');
+    client.on("error", (err) => {
+      connectionStatus.textContent = "Connection Error";
+      statusDot.style.background = "red";
+      statusDot.style.boxShadow = "0 0 10px red";
+      console.error("MQTT Error:", err);
+    });
 
-            if (status) {
-                dot.className = 'status-dot connected';
-                text.textContent = 'Connected';
-                espStatus.textContent = 'Online';
-                espStatus.style.color = '#4caf50';
-            } else {
-                dot.className = 'status-dot disconnected';
-                text.textContent = 'Disconnected';
-                espStatus.textContent = 'Offline';
-                espStatus.style.color = '#f44336';
-            }
-        }
+    client.on("message", (topic, message) => {
+      const msg = message.toString();
 
-        // ═══════════════════════════════════════════════
-        // TOGGLE DEVICE
-        // ═══════════════════════════════════════════════
-        function toggleDevice(device, state) {
-            console.log(`Toggling ${device} to ${state}`);
-            
-            set(ref(database, 'devices/' + device), state)
-                .then(() => {
-                    showAlert(`${formatDeviceName(device)} turned ${state ? 'ON' : 'OFF'}`, 'success');
-                    updateActiveDeviceCount();
-                })
-                .catch((error) => {
-                    console.error("Error:", error);
-                    showAlert(`Failed to control ${formatDeviceName(device)}`, 'danger');
-                });
-        }
+      if (topic === "home/relay1/state") {
+        document.getElementById("state1").textContent = "Status: " + msg;
+      } else if (topic === "home/relay2/state") {
+        document.getElementById("state2").textContent = "Status: " + msg;
+      } else if (topic === "home/relay3/state") {
+        document.getElementById("state3").textContent = "Status: " + msg;
+      } else if (topic === "home/relay4/state") {
+        document.getElementById("state4").textContent = "Status: " + msg;
+      }
+    });
 
-        // ═══════════════════════════════════════════════
-        // ALL DEVICES CONTROL
-        // ═══════════════════════════════════════════════
-        function allDevices(state) {
-            const devices = ['light1', 'light2', 'fan', 'socket'];
-            
-            devices.forEach(device => {
-                set(ref(database, 'devices/' + device), state);
-                document.getElementById(device + 'Toggle').checked = state;
-            });
-            
-            showAlert(`All devices turned ${state ? 'ON' : 'OFF'}`, state ? 'success' : 'warning');
-            updateActiveDeviceCount();
-        }
-
-        // ═══════════════════════════════════════════════
-        // REFRESH DATA
-        // ═══════════════════════════════════════════════
-        function refreshData() {
-            showAlert('Refreshing data...', 'info');
-            loadAllData();
-        }
-
-        // ═══════════════════════════════════════════════
-        // SHOW SYSTEM INFO
-        // ═══════════════════════════════════════════════
-        function showSystemInfo() {
-            const info = `
-╔════════════════════════════════════════════════╗
-║      IoT HOME AUTOMATION SYSTEM                ║
-╠════════════════════════════════════════════════╣
-║  Project: Smart Home Automation                ║
-║  College: Velammal Engineering College         ║
-║  Department: ECE                               ║
-║  Year: 2024-2025                               ║
-╠════════════════════════════════════════════════╣
-║  HARDWARE COMPONENTS:                          ║
-║  • ESP32 Microcontroller                       ║
-║  • 4-Channel Relay Module                      ║
-║  • Push Buttons: GPIO 23, 22, 21, 19           ║
-║  • Relays: GPIO 13, 12, 14, 27                 ║
-╠════════════════════════════════════════════════╣
-║  SOFTWARE COMPONENTS:                          ║
-║  • Firebase Realtime Database                  ║
-║  • Web Dashboard (HTML/CSS/JS)                 ║
-║  • Arduino IDE (ESP32 Code)                    ║
-╚════════════════════════════════════════════════╝
-            `;
-            alert(info);
-        }
-
-        // ═══════════════════════════════════════════════
-        // SHOW ALERT
-        // ═══════════════════════════════════════════════
-        function showAlert(message, type) {
-            const container = document.getElementById('alertContainer');
-            const alert = document.createElement('div');
-            alert.className = `alert alert-${type}`;
-            
-            let icon = 'info-circle';
-            if (type === 'success') icon = 'check-circle';
-            if (type === 'warning') icon = 'exclamation-triangle';
-            if (type === 'danger') icon = 'times-circle';
-            
-            alert.innerHTML = `<i class="fas fa-${icon}"></i> ${message}`;
-            container.appendChild(alert);
-            
-            setTimeout(() => {
-                alert.style.animation = 'slideOut 0.3s ease forwards';
-                setTimeout(() => alert.remove(), 300);
-            }, 3000);
-        }
-
-        // ═══════════════════════════════════════════════
-        // FORMAT DEVICE NAME
-        // ═══════════════════════════════════════════════
-        function formatDeviceName(device) {
-            const names = {
-                'light1': 'Light 1',
-                'light2': 'Light 2',
-                'fan': 'Fan',
-                'socket': 'Socket'
-            };
-            return names[device] || device;
-        }
-
-        // ═══════════════════════════════════════════════
-        // UPDATE ACTIVE DEVICE COUNT
-        // ═══════════════════════════════════════════════
-        function updateActiveDeviceCount() {
-            let count = 0;
-            if (document.getElementById('light1Toggle').checked) count++;
-            if (document.getElementById('light2Toggle').checked) count++;
-            if (document.getElementById('fanToggle').checked) count++;
-            if (document.getElementById('socketToggle').checked) count++;
-            document.getElementById('activeDevices').textContent = `${count}/4`;
-        }
-
-        // ═══════════════════════════════════════════════
-        // SETUP FIREBASE LISTENERS
-        // ═══════════════════════════════════════════════
-        function setupListeners() {
-            // Device Status Listeners
-            const devices = ['light1', 'light2', 'fan', 'socket'];
-            
-            devices.forEach(device => {
-                onValue(ref(database, 'status/' + device), (snapshot) => {
-                    const state = snapshot.val();
-                    document.getElementById(device + 'Toggle').checked = state;
-                    document.getElementById(device + 'Status').textContent = state ? 'ON' : 'OFF';
-                    document.getElementById(device + 'Status').style.color = state ? '#4caf50' : '#888';
-                    
-                    // Fan icon animation
-                    if (device === 'fan') {
-                        const fanIcon = document.getElementById('fanIcon');
-                        fanIcon.style.animation = state ? 'spin 1s linear infinite' : 'none';
-                    }
-                    
-                    updateActiveDeviceCount();
-                });
-            });
-
-            // Last Update Listener
-            onValue(ref(database, 'lastUpdate'), (snapshot) => {
-                const timestamp = snapshot.val();
-                if (timestamp) {
-                    document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
-                }
-            });
-
-            updateConnectionStatus(true);
-        }
-
-        // ═══════════════════════════════════════════════
-        // LOAD ALL DATA
-        // ═══════════════════════════════════════════════
-        function loadAllData() {
-            get(ref(database, '/')).then((snapshot) => {
-                if (snapshot.exists()) {
-                    console.log("✓ Data loaded successfully");
-                    updateConnectionStatus(true);
-                } else {
-                    console.log("Initializing database...");
-                    initializeDatabase();
-                }
-            }).catch((error) => {
-                console.error("Error:", error);
-                updateConnectionStatus(false);
-            });
-        }
-
-        // ═══════════════════════════════════════════════
-        // INITIALIZE DATABASE
-        // ═══════════════════════════════════════════════
-        function initializeDatabase() {
-            const initialData = {
-                devices: { light1: false, light2: false, fan: false, socket: false },
-                status: { light1: false, light2: false, fan: false, socket: false },
-                lastUpdate: Date.now()
-            };
-
-            set(ref(database, '/'), initialData)
-                .then(() => {
-                    console.log("✓ Database initialized");
-                    showAlert('System initialized successfully!', 'success');
-                })
-                .catch((error) => console.error("Error:", error));
-        }
-
-        // ═══════════════════════════════════════════════
-        // LIVE CLOCK
-        // ═══════════════════════════════════════════════
-        function updateClock() {
-            const now = new Date();
-            const options = { 
-                hour: '2-digit', 
-                minute: '2-digit', 
-                second: '2-digit',
-                hour12: true 
-            };
-            document.getElementById('liveClock').textContent = now.toLocaleTimeString('en-US', options);
-        }
-
-        // ═══════════════════════════════════════════════
-        // INITIALIZE APP
-        // ═══════════════════════════════════════════════
-        function initApp() {
-            // Hide loading overlay after 2 seconds
-            setTimeout(() => {
-                document.getElementById('loadingOverlay').classList.add('hidden');
-            }, 2000);
-
-            // Setup listeners
-            setupListeners();
-            loadAllData();
-
-            // Update clock every second
-            updateClock();
-            setInterval(updateClock, 1000);
-
-            // Check connection every 5 seconds
-            setInterval(() => {
-                get(ref(database, 'lastUpdate')).then(() => {
-                    updateConnectionStatus(true);
-                }).catch(() => {
-                    updateConnectionStatus(false);
-                });
-            }, 5000);
-        }
-
-        // Start the application
-        initApp();
-    </script>
-
-    <style>
-        /* Fan spinning animation */
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-    </style>
+    function sendCommand(relay, command) {
+      const topic = `home/relay${relay}/set`;
+      client.publish(topic, command);
+    }
+  </script>
 </body>
 </html>
