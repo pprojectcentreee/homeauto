@@ -203,7 +203,7 @@
 
         /* Main Container */
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
@@ -211,7 +211,7 @@
         /* Grid Layout */
         .main-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 25px;
             margin-bottom: 30px;
         }
@@ -376,46 +376,6 @@
             transform: translateX(35px);
         }
 
-        /* Sensor Grid */
-        .sensor-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-        }
-
-        .sensor-box {
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .sensor-box:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: scale(1.02);
-        }
-
-        .sensor-icon {
-            font-size: 2em;
-            margin-bottom: 10px;
-        }
-
-        .sensor-value {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.8em;
-            color: var(--accent);
-            font-weight: 600;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
-        }
-
-        .sensor-label {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.85em;
-            margin-top: 5px;
-        }
-
         /* Auto Mode Card */
         .auto-card {
             background: linear-gradient(135deg, rgba(198, 40, 40, 0.3), rgba(26, 35, 126, 0.3));
@@ -521,13 +481,6 @@
             margin-bottom: 15px;
         }
 
-        .footer-logo img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: 2px solid var(--accent);
-        }
-
         .footer h3 {
             color: var(--accent);
             font-size: 1.2em;
@@ -599,21 +552,10 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
-        .alert-success {
-            background: linear-gradient(135deg, #4caf50, #2e7d32);
-        }
-
-        .alert-warning {
-            background: linear-gradient(135deg, #ff9800, #f57c00);
-        }
-
-        .alert-danger {
-            background: linear-gradient(135deg, #f44336, #c62828);
-        }
-
-        .alert-info {
-            background: linear-gradient(135deg, #2196f3, #1565c0);
-        }
+        .alert-success { background: linear-gradient(135deg, #4caf50, #2e7d32); }
+        .alert-warning { background: linear-gradient(135deg, #ff9800, #f57c00); }
+        .alert-danger { background: linear-gradient(135deg, #f44336, #c62828); }
+        .alert-info { background: linear-gradient(135deg, #2196f3, #1565c0); }
 
         @keyframes slideIn {
             from { transform: translateX(100%); opacity: 0; }
@@ -665,6 +607,13 @@
             font-size: 1.2em;
         }
 
+        /* Live Clock */
+        .live-clock {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent);
+            font-size: 1.1em;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .header-content {
@@ -684,10 +633,6 @@
                 grid-template-columns: 1fr;
             }
 
-            .sensor-grid {
-                grid-template-columns: 1fr;
-            }
-
             .college-details h1 {
                 font-size: 1.1em;
             }
@@ -696,13 +641,10 @@
                 flex-direction: column;
                 gap: 10px;
             }
-        }
 
-        /* Live Clock */
-        .live-clock {
-            font-family: 'Orbitron', sans-serif;
-            color: var(--accent);
-            font-size: 1.1em;
+            .status-container {
+                justify-content: center;
+            }
         }
     </style>
 </head>
@@ -847,77 +789,6 @@
                 </div>
             </div>
 
-            <!-- Sensor Monitoring Card -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h3 class="card-title">Live Sensors</h3>
-                </div>
-
-                <div class="sensor-grid">
-                    <div class="sensor-box">
-                        <div class="sensor-icon">🌡️</div>
-                        <div class="sensor-value" id="temperature">--°C</div>
-                        <div class="sensor-label">Temperature</div>
-                    </div>
-
-                    <div class="sensor-box">
-                        <div class="sensor-icon">💧</div>
-                        <div class="sensor-value" id="humidity">--%</div>
-                        <div class="sensor-label">Humidity</div>
-                    </div>
-
-                    <div class="sensor-box">
-                        <div class="sensor-icon">🚶</div>
-                        <div class="sensor-value" id="motion">--</div>
-                        <div class="sensor-label">Motion</div>
-                    </div>
-
-                    <div class="sensor-box">
-                        <div class="sensor-icon">☀️</div>
-                        <div class="sensor-value" id="lightLevel">--%</div>
-                        <div class="sensor-label">Light Level</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Automation Card -->
-            <div class="card auto-card">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <i class="fas fa-robot"></i>
-                    </div>
-                    <h3 class="card-title">Smart Automation</h3>
-                </div>
-
-                <div class="device-item" style="background: rgba(255,215,0,0.1); border-color: var(--accent);">
-                    <div class="device-info">
-                        <div class="device-icon" style="background: linear-gradient(135deg, #ffd700, #ff8f00);">
-                            <i class="fas fa-magic"></i>
-                        </div>
-                        <div>
-                            <div class="device-name">Auto Mode</div>
-                            <div class="device-status" id="autoModeStatus">DISABLED</div>
-                        </div>
-                    </div>
-                    <label class="switch">
-                        <input type="checkbox" id="autoModeToggle" onchange="toggleAutoMode(this.checked)">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-
-                <div class="auto-features">
-                    <ul>
-                        <li><i class="fas fa-check-circle"></i> Motion-based light control</li>
-                        <li><i class="fas fa-check-circle"></i> Temperature-based fan control (>28°C ON)</li>
-                        <li><i class="fas fa-check-circle"></i> Ambient light sensing</li>
-                        <li><i class="fas fa-check-circle"></i> Energy optimization</li>
-                    </ul>
-                </div>
-            </div>
-
             <!-- Quick Actions Card -->
             <div class="card">
                 <div class="card-header">
@@ -940,6 +811,20 @@
                     <button class="action-btn secondary" onclick="showSystemInfo()">
                         <i class="fas fa-info-circle"></i> System Info
                     </button>
+                </div>
+
+                <!-- Project Info Box -->
+                <div style="margin-top: 25px; padding: 20px; background: rgba(255,215,0,0.1); border-radius: 15px; border: 1px solid var(--accent);">
+                    <h4 style="color: var(--accent); margin-bottom: 10px;">
+                        <i class="fas fa-microchip"></i> System Components
+                    </h4>
+                    <ul style="list-style: none; color: rgba(255,255,255,0.9); font-size: 0.9em;">
+                        <li style="padding: 5px 0;"><i class="fas fa-check" style="color: #4caf50; margin-right: 10px;"></i> ESP32 Microcontroller</li>
+                        <li style="padding: 5px 0;"><i class="fas fa-check" style="color: #4caf50; margin-right: 10px;"></i> 4-Channel Relay Module</li>
+                        <li style="padding: 5px 0;"><i class="fas fa-check" style="color: #4caf50; margin-right: 10px;"></i> 4 Push Buttons (Manual Control)</li>
+                        <li style="padding: 5px 0;"><i class="fas fa-check" style="color: #4caf50; margin-right: 10px;"></i> Firebase Realtime Database</li>
+                        <li style="padding: 5px 0;"><i class="fas fa-check" style="color: #4caf50; margin-right: 10px;"></i> Web Dashboard Interface</li>
+                    </ul>
                 </div>
             </div>
 
@@ -1012,7 +897,6 @@
 
         // Make functions globally available
         window.toggleDevice = toggleDevice;
-        window.toggleAutoMode = toggleAutoMode;
         window.allDevices = allDevices;
         window.refreshData = refreshData;
         window.showSystemInfo = showSystemInfo;
@@ -1059,21 +943,6 @@
         }
 
         // ═══════════════════════════════════════════════
-        // TOGGLE AUTO MODE
-        // ═══════════════════════════════════════════════
-        function toggleAutoMode(state) {
-            set(ref(database, 'settings/autoMode'), state)
-                .then(() => {
-                    showAlert(`Auto Mode ${state ? 'ENABLED' : 'DISABLED'}`, state ? 'success' : 'warning');
-                    document.getElementById('autoModeStatus').textContent = state ? 'ENABLED' : 'DISABLED';
-                })
-                .catch((error) => {
-                    console.error("Error:", error);
-                    showAlert('Failed to toggle Auto Mode', 'danger');
-                });
-        }
-
-        // ═══════════════════════════════════════════════
         // ALL DEVICES CONTROL
         // ═══════════════════════════════════════════════
         function allDevices(state) {
@@ -1101,18 +970,25 @@
         // ═══════════════════════════════════════════════
         function showSystemInfo() {
             const info = `
-╔════════════════════════════════════════╗
-║     IoT HOME AUTOMATION SYSTEM         ║
-╠════════════════════════════════════════╣
-║ Project: Smart Home Automation         ║
-║ College: Velammal Engineering College  ║
-║ Controller: ESP32                      ║
-║ Backend: Firebase Realtime Database    ║
-║ Sensors: DHT11, PIR, LDR               ║
-║ Relays: 4 Channel (GPIO 13,12,14,27)   ║
-║ Buttons: 4 Push Buttons                ║
-║         (GPIO 23,22,21,19)             ║
-╚════════════════════════════════════════╝
+╔════════════════════════════════════════════════╗
+║      IoT HOME AUTOMATION SYSTEM                ║
+╠════════════════════════════════════════════════╣
+║  Project: Smart Home Automation                ║
+║  College: Velammal Engineering College         ║
+║  Department: ECE                               ║
+║  Year: 2024-2025                               ║
+╠════════════════════════════════════════════════╣
+║  HARDWARE COMPONENTS:                          ║
+║  • ESP32 Microcontroller                       ║
+║  • 4-Channel Relay Module                      ║
+║  • Push Buttons: GPIO 23, 22, 21, 19           ║
+║  • Relays: GPIO 13, 12, 14, 27                 ║
+╠════════════════════════════════════════════════╣
+║  SOFTWARE COMPONENTS:                          ║
+║  • Firebase Realtime Database                  ║
+║  • Web Dashboard (HTML/CSS/JS)                 ║
+║  • Arduino IDE (ESP32 Code)                    ║
+╚════════════════════════════════════════════════╝
             `;
             alert(info);
         }
@@ -1188,41 +1064,6 @@
                 });
             });
 
-            // Sensor Listeners
-            onValue(ref(database, 'sensors/temperature'), (snapshot) => {
-                const temp = snapshot.val();
-                document.getElementById('temperature').textContent = temp ? temp.toFixed(1) + '°C' : '--°C';
-                
-                if (temp > 35) showAlert('🔥 High temperature warning!', 'danger');
-            });
-
-            onValue(ref(database, 'sensors/humidity'), (snapshot) => {
-                const humidity = snapshot.val();
-                document.getElementById('humidity').textContent = humidity ? humidity.toFixed(1) + '%' : '--%';
-            });
-
-            onValue(ref(database, 'sensors/lightLevel'), (snapshot) => {
-                const light = snapshot.val();
-                document.getElementById('lightLevel').textContent = light !== null ? light + '%' : '--%';
-            });
-
-            onValue(ref(database, 'sensors/motion'), (snapshot) => {
-                const motion = snapshot.val();
-                const motionEl = document.getElementById('motion');
-                motionEl.textContent = motion ? '🟢 YES' : '⚫ NO';
-                motionEl.style.color = motion ? '#4caf50' : '#888';
-                
-                if (motion) showAlert('🚶 Motion detected!', 'info');
-            });
-
-            // Auto Mode Listener
-            onValue(ref(database, 'settings/autoMode'), (snapshot) => {
-                const autoMode = snapshot.val();
-                document.getElementById('autoModeToggle').checked = autoMode;
-                document.getElementById('autoModeStatus').textContent = autoMode ? 'ENABLED' : 'DISABLED';
-                document.getElementById('autoModeStatus').style.color = autoMode ? '#4caf50' : '#888';
-            });
-
             // Last Update Listener
             onValue(ref(database, 'lastUpdate'), (snapshot) => {
                 const timestamp = snapshot.val();
@@ -1258,9 +1099,8 @@
         function initializeDatabase() {
             const initialData = {
                 devices: { light1: false, light2: false, fan: false, socket: false },
-                sensors: { temperature: 0, humidity: 0, lightLevel: 0, motion: false },
-                settings: { autoMode: false },
-                status: { light1: false, light2: false, fan: false, socket: false }
+                status: { light1: false, light2: false, fan: false, socket: false },
+                lastUpdate: Date.now()
             };
 
             set(ref(database, '/'), initialData)
