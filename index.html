@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Home Automation | Velammal Engineering College</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1a237e;
+            --secondary: #c62828;
+            --accent: #ffd700;
+            --dark: #0d1b2a;
+            --light: #ffffff;
+            --gradient1: linear-gradient(135deg, #1a237e 0%, #283593 50%, #3949ab 100%);
+            --gradient2: linear-gradient(135deg, #c62828 0%, #d32f2f 100%);
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--gradient1);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation span {
+            position: absolute;
+            display: block;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            animation: move 25s infinite;
+            bottom: -150px;
+            border-radius: 50%;
+        }
+
+        .bg-animation span:nth-child(1) { left: 10%; width: 80px; height: 80px; animation-delay: 0s; }
+        .bg-animation span:nth-child(2) { left: 20%; width: 20px; height: 20px; animation-delay: 2s; animation-duration: 12s; }
+        .bg-animation span:nth-child(3) { left: 25%; width: 20px; height: 20px; animation-delay: 4s; }
+        .bg-animation span:nth-child(4) { left: 40%; width: 60px; height: 60px; animation-delay: 0s; animation-duration: 18s; }
+        .bg-animation span:nth-child(5) { left: 65%; width: 20px; height: 20px; animation-delay: 0s; }
+        .bg-animation span:nth-child(6) { left: 75%; width: 110px; height: 110px; animation-delay: 3s; }
+        .bg-animation span:nth-child(7) { left: 35%; width: 150px; height: 150px; animation-delay: 7s; }
+        .bg-animation span:nth-child(8) { left: 50%; width: 25px; height: 25px; animation-delay: 15s; animation-duration: 45s; }
+        .bg-animation span:nth-child(9) { left: 85%; width: 15px; height: 15px; animation-delay: 2s; animation-duration: 35s; }
+        .bg-animation span:nth-child(10) { left: 90%; width: 150px; height: 150px; animation-delay: 0s; animation-duration: 11s; }
+
+        @keyframes move {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-1000px) rotate(720deg); opacity: 0; }
+        }
+
+        /* Header */
+        .header {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .college-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .college-logo {
+            width: 70px;
+            height: 70px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            border: 3px solid var(--accent);
+        }
+
+        .college-details h1 {
+            color: var(--accent);
+            font-size: 1.4em;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .college-details p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.85em;
+        }
+
+        .project-title {
+            text-align: right;
+        }
+
+        .project-title h2 {
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .project-title h2 i {
+            color: var(--accent);
+            animation: pulse 2s infinite;
+        }
+
+        .project-title p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.75em;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        /* Status Bar */
+        .status-bar {
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .status-container {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            animation: blink 1.5s infinite;
+        }
+
+        .status-dot.connected { background: #4caf50; box-shadow: 0 0 10px #4caf50; }
+        .status-dot.disconnected { background: #f44336; box-shadow: 0 0 10px #f44336; }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Grid Layout */
+        .main-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: 0.5s;
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: var(--accent);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--glass-border);
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            color: white;
+            box-shadow: 0 5px 15px rgba(198, 40, 40, 0.4);
+        }
+
+        .card-title {
+            color: white;
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+
+        /* Device Items */
+        .device-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 20px;
+            margin: 12px 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .device-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .device-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .device-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3em;
+            transition: all 0.3s ease;
+        }
+
+        .device-icon.light { background: linear-gradient(135deg, #ffd54f, #ffb300); color: #333; }
+        .device-icon.fan { background: linear-gradient(135deg, #4fc3f7, #0288d1); color: white; }
+        .device-icon.socket { background: linear-gradient(135deg, #81c784, #388e3c); color: white; }
+
+        .device-name {
+            color: white;
+            font-weight: 500;
+            font-size: 1.05em;
+        }
+
+        .device-status {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.8em;
+        }
+
+        /* Toggle Switch */
+        .switch {
+            position: relative;
+            width: 70px;
+            height: 35px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.2);
+            transition: 0.4s;
+            border-radius: 35px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 27px;
+            width: 27px;
+            left: 2px;
+            bottom: 2px;
+            background: white;
+            transition: 0.4s;
+            border-radius: 50%;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        input:checked + .slider {
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+            border-color: #4caf50;
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.5);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(35px);
+        }
+
+        /* Sensor Grid */
+        .sensor-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .sensor-box {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .sensor-box:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: scale(1.02);
+        }
+
+        .sensor-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .sensor-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8em;
+            color: var(--accent);
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+
+        .sensor-label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.85em;
+            margin-top: 5px;
+        }
+
+        /* Auto Mode Card */
+        .auto-card {
+            background: linear-gradient(135deg, rgba(198, 40, 40, 0.3), rgba(26, 35, 126, 0.3));
+            border: 2px solid var(--accent);
+        }
+
+        .auto-features {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+        }
+
+        .auto-features ul {
+            list-style: none;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .auto-features li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .auto-features li:last-child {
+            border-bottom: none;
+        }
+
+        .auto-features li i {
+            color: var(--accent);
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            gap: 15px;
+        }
+
+        .action-btn {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .action-btn.primary {
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+            color: white;
+            box-shadow: 0 5px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        .action-btn.danger {
+            background: linear-gradient(135deg, #f44336, #c62828);
+            color: white;
+            box-shadow: 0 5px 20px rgba(244, 67, 54, 0.4);
+        }
+
+        .action-btn.secondary {
+            background: linear-gradient(135deg, #2196f3, #1565c0);
+            color: white;
+            box-shadow: 0 5px 20px rgba(33, 150, 243, 0.4);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .action-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--glass-border);
+            padding: 25px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .footer-logo img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid var(--accent);
+        }
+
+        .footer h3 {
+            color: var(--accent);
+            font-size: 1.2em;
+        }
+
+        .footer p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9em;
+            margin: 5px 0;
+        }
+
+        .footer-links {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        .team-info {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .team-info h4 {
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .team-members {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Alerts */
+        .alert-container {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .alert {
+            padding: 15px 25px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+        }
+
+        .alert-warning {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, #f44336, #c62828);
+        }
+
+        .alert-info {
+            background: linear-gradient(135deg, #2196f3, #1565c0);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 0.5s;
+        }
+
+        .loading-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader {
+            width: 80px;
+            height: 80px;
+            border: 5px solid rgba(255, 255, 255, 0.1);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: white;
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                justify-content: center;
+                text-align: center;
+            }
+
+            .college-info {
+                flex-direction: column;
+            }
+
+            .project-title {
+                text-align: center;
+            }
+
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sensor-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .college-details h1 {
+                font-size: 1.1em;
+            }
+
+            .team-members {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        /* Live Clock */
+        .live-clock {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent);
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loader"></div>
+        <p class="loading-text">Connecting to Smart Home System...</p>
+    </div>
+
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span>
+    </div>
+
+    <!-- Alert Container -->
+    <div class="alert-container" id="alertContainer"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="college-info">
+                <div class="college-logo">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <div class="college-details">
+                    <h1>VELAMMAL ENGINEERING COLLEGE</h1>
+                    <p>📍 Chennai, Tamil Nadu | Affiliated to Anna University</p>
+                    <p>🎓 Department of Electronics & Communication Engineering</p>
+                </div>
+            </div>
+            <div class="project-title">
+                <h2><i class="fas fa-home"></i> IoT Smart Home</h2>
+                <p>Final Year Project | 2024-2025</p>
+                <p class="live-clock" id="liveClock"></p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <div class="status-container">
+            <div class="status-item">
+                <span class="status-dot" id="connectionDot"></span>
+                <span id="connectionText">Connecting...</span>
+            </div>
+            <div class="status-item">
+                <i class="fas fa-wifi" style="color: var(--accent);"></i>
+                <span>ESP32 Status: <strong id="espStatus">Checking...</strong></span>
+            </div>
+            <div class="status-item">
+                <i class="fas fa-clock" style="color: var(--accent);"></i>
+                <span>Last Update: <strong id="lastUpdate">--</strong></span>
+            </div>
+            <div class="status-item">
+                <i class="fas fa-microchip" style="color: var(--accent);"></i>
+                <span>Devices Active: <strong id="activeDevices">0/4</strong></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <div class="main-grid">
+            
+            <!-- Device Control Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-plug"></i>
+                    </div>
+                    <h3 class="card-title">Device Control</h3>
+                </div>
+
+                <!-- Light 1 -->
+                <div class="device-item">
+                    <div class="device-info">
+                        <div class="device-icon light">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <div>
+                            <div class="device-name">Light 1</div>
+                            <div class="device-status" id="light1Status">OFF</div>
+                        </div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="light1Toggle" onchange="toggleDevice('light1', this.checked)">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <!-- Light 2 -->
+                <div class="device-item">
+                    <div class="device-info">
+                        <div class="device-icon light">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <div>
+                            <div class="device-name">Light 2</div>
+                            <div class="device-status" id="light2Status">OFF</div>
+                        </div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="light2Toggle" onchange="toggleDevice('light2', this.checked)">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <!-- Fan -->
+                <div class="device-item">
+                    <div class="device-info">
+                        <div class="device-icon fan">
+                            <i class="fas fa-fan" id="fanIcon"></i>
+                        </div>
+                        <div>
+                            <div class="device-name">Ceiling Fan</div>
+                            <div class="device-status" id="fanStatus">OFF</div>
+                        </div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="fanToggle" onchange="toggleDevice('fan', this.checked)">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <!-- Socket -->
+                <div class="device-item">
+                    <div class="device-info">
+                        <div class="device-icon socket">
+                            <i class="fas fa-plug"></i>
+                        </div>
+                        <div>
+                            <div class="device-name">Power Socket</div>
+                            <div class="device-status" id="socketStatus">OFF</div>
+                        </div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="socketToggle" onchange="toggleDevice('socket', this.checked)">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Sensor Monitoring Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="card-title">Live Sensors</h3>
+                </div>
+
+                <div class="sensor-grid">
+                    <div class="sensor-box">
+                        <div class="sensor-icon">🌡️</div>
+                        <div class="sensor-value" id="temperature">--°C</div>
+                        <div class="sensor-label">Temperature</div>
+                    </div>
+
+                    <div class="sensor-box">
+                        <div class="sensor-icon">💧</div>
+                        <div class="sensor-value" id="humidity">--%</div>
+                        <div class="sensor-label">Humidity</div>
+                    </div>
+
+                    <div class="sensor-box">
+                        <div class="sensor-icon">🚶</div>
+                        <div class="sensor-value" id="motion">--</div>
+                        <div class="sensor-label">Motion</div>
+                    </div>
+
+                    <div class="sensor-box">
+                        <div class="sensor-icon">☀️</div>
+                        <div class="sensor-value" id="lightLevel">--%</div>
+                        <div class="sensor-label">Light Level</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Automation Card -->
+            <div class="card auto-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3 class="card-title">Smart Automation</h3>
+                </div>
+
+                <div class="device-item" style="background: rgba(255,215,0,0.1); border-color: var(--accent);">
+                    <div class="device-info">
+                        <div class="device-icon" style="background: linear-gradient(135deg, #ffd700, #ff8f00);">
+                            <i class="fas fa-magic"></i>
+                        </div>
+                        <div>
+                            <div class="device-name">Auto Mode</div>
+                            <div class="device-status" id="autoModeStatus">DISABLED</div>
+                        </div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="autoModeToggle" onchange="toggleAutoMode(this.checked)">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="auto-features">
+                    <ul>
+                        <li><i class="fas fa-check-circle"></i> Motion-based light control</li>
+                        <li><i class="fas fa-check-circle"></i> Temperature-based fan control (>28°C ON)</li>
+                        <li><i class="fas fa-check-circle"></i> Ambient light sensing</li>
+                        <li><i class="fas fa-check-circle"></i> Energy optimization</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Quick Actions Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3 class="card-title">Quick Actions</h3>
+                </div>
+
+                <div class="quick-actions">
+                    <button class="action-btn primary" onclick="allDevices(true)">
+                        <i class="fas fa-power-off"></i> Turn All ON
+                    </button>
+                    <button class="action-btn danger" onclick="allDevices(false)">
+                        <i class="fas fa-power-off"></i> Turn All OFF
+                    </button>
+                    <button class="action-btn secondary" onclick="refreshData()">
+                        <i class="fas fa-sync-alt"></i> Refresh Data
+                    </button>
+                    <button class="action-btn secondary" onclick="showSystemInfo()">
+                        <i class="fas fa-info-circle"></i> System Info
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <div class="college-logo" style="width: 50px; height: 50px; font-size: 18px;">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h3>Velammal Engineering College</h3>
+            </div>
+            <p>Ambattur-Red Hills Road, Chennai - 600 066</p>
+            <p>📞 Phone: 044-2655 2123 | 📧 Email: info@velammal.edu.in</p>
+            
+            <div class="footer-links">
+                <a href="https://www.velammal.edu.in" target="_blank">
+                    <i class="fas fa-globe"></i> Website
+                </a>
+                <a href="#"><i class="fas fa-file-pdf"></i> Project Report</a>
+                <a href="#"><i class="fab fa-github"></i> Source Code</a>
+            </div>
+
+            <div class="team-info">
+                <h4>🎓 Project Team</h4>
+                <div class="team-members">
+                    <span><i class="fas fa-user-graduate"></i> Student Name 1</span>
+                    <span><i class="fas fa-user-graduate"></i> Student Name 2</span>
+                    <span><i class="fas fa-user-graduate"></i> Student Name 3</span>
+                    <span><i class="fas fa-user-graduate"></i> Student Name 4</span>
+                </div>
+                <p style="margin-top: 15px;">
+                    <i class="fas fa-chalkboard-teacher"></i> 
+                    Guide: <strong>Prof. Guide Name</strong> | Department of ECE
+                </p>
+            </div>
+
+            <p style="margin-top: 20px; opacity: 0.7;">
+                © 2024-2025 Velammal Engineering College. All Rights Reserved.
+            </p>
+            <p style="opacity: 0.5; font-size: 0.8em;">
+                IoT Based Home Automation System | Made with ❤️ using ESP32 & Firebase
+            </p>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, set, onValue, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDh5fpbfVxFRG0A0QKvg2HnboooAU_QaQk",
+            authDomain: "home-automation-2aa42.firebaseapp.com",
+            projectId: "home-automation-2aa42",
+            storageBucket: "home-automation-2aa42.firebasestorage.app",
+            messagingSenderId: "124512289380",
+            appId: "1:124512289380:web:9b6d5e81a1d29b83ad1571",
+            measurementId: "G-790RLSHQSD",
+            databaseURL: "https://home-automation-2aa42-default-rtdb.firebaseio.com"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Make functions globally available
+        window.toggleDevice = toggleDevice;
+        window.toggleAutoMode = toggleAutoMode;
+        window.allDevices = allDevices;
+        window.refreshData = refreshData;
+        window.showSystemInfo = showSystemInfo;
+
+        let isConnected = false;
+
+        // ═══════════════════════════════════════════════
+        // CONNECTION STATUS
+        // ═══════════════════════════════════════════════
+        function updateConnectionStatus(status) {
+            isConnected = status;
+            const dot = document.getElementById('connectionDot');
+            const text = document.getElementById('connectionText');
+            const espStatus = document.getElementById('espStatus');
+
+            if (status) {
+                dot.className = 'status-dot connected';
+                text.textContent = 'Connected';
+                espStatus.textContent = 'Online';
+                espStatus.style.color = '#4caf50';
+            } else {
+                dot.className = 'status-dot disconnected';
+                text.textContent = 'Disconnected';
+                espStatus.textContent = 'Offline';
+                espStatus.style.color = '#f44336';
+            }
+        }
+
+        // ═══════════════════════════════════════════════
+        // TOGGLE DEVICE
+        // ═══════════════════════════════════════════════
+        function toggleDevice(device, state) {
+            console.log(`Toggling ${device} to ${state}`);
+            
+            set(ref(database, 'devices/' + device), state)
+                .then(() => {
+                    showAlert(`${formatDeviceName(device)} turned ${state ? 'ON' : 'OFF'}`, 'success');
+                    updateActiveDeviceCount();
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    showAlert(`Failed to control ${formatDeviceName(device)}`, 'danger');
+                });
+        }
+
+        // ═══════════════════════════════════════════════
+        // TOGGLE AUTO MODE
+        // ═══════════════════════════════════════════════
+        function toggleAutoMode(state) {
+            set(ref(database, 'settings/autoMode'), state)
+                .then(() => {
+                    showAlert(`Auto Mode ${state ? 'ENABLED' : 'DISABLED'}`, state ? 'success' : 'warning');
+                    document.getElementById('autoModeStatus').textContent = state ? 'ENABLED' : 'DISABLED';
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    showAlert('Failed to toggle Auto Mode', 'danger');
+                });
+        }
+
+        // ═══════════════════════════════════════════════
+        // ALL DEVICES CONTROL
+        // ═══════════════════════════════════════════════
+        function allDevices(state) {
+            const devices = ['light1', 'light2', 'fan', 'socket'];
+            
+            devices.forEach(device => {
+                set(ref(database, 'devices/' + device), state);
+                document.getElementById(device + 'Toggle').checked = state;
+            });
+            
+            showAlert(`All devices turned ${state ? 'ON' : 'OFF'}`, state ? 'success' : 'warning');
+            updateActiveDeviceCount();
+        }
+
+        // ═══════════════════════════════════════════════
+        // REFRESH DATA
+        // ═══════════════════════════════════════════════
+        function refreshData() {
+            showAlert('Refreshing data...', 'info');
+            loadAllData();
+        }
+
+        // ═══════════════════════════════════════════════
+        // SHOW SYSTEM INFO
+        // ═══════════════════════════════════════════════
+        function showSystemInfo() {
+            const info = `
+╔════════════════════════════════════════╗
+║     IoT HOME AUTOMATION SYSTEM         ║
+╠════════════════════════════════════════╣
+║ Project: Smart Home Automation         ║
+║ College: Velammal Engineering College  ║
+║ Controller: ESP32                      ║
+║ Backend: Firebase Realtime Database    ║
+║ Sensors: DHT11, PIR, LDR               ║
+║ Relays: 4 Channel (GPIO 13,12,14,27)   ║
+║ Buttons: 4 Push Buttons                ║
+║         (GPIO 23,22,21,19)             ║
+╚════════════════════════════════════════╝
+            `;
+            alert(info);
+        }
+
+        // ═══════════════════════════════════════════════
+        // SHOW ALERT
+        // ═══════════════════════════════════════════════
+        function showAlert(message, type) {
+            const container = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            
+            let icon = 'info-circle';
+            if (type === 'success') icon = 'check-circle';
+            if (type === 'warning') icon = 'exclamation-triangle';
+            if (type === 'danger') icon = 'times-circle';
+            
+            alert.innerHTML = `<i class="fas fa-${icon}"></i> ${message}`;
+            container.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.style.animation = 'slideOut 0.3s ease forwards';
+                setTimeout(() => alert.remove(), 300);
+            }, 3000);
+        }
+
+        // ═══════════════════════════════════════════════
+        // FORMAT DEVICE NAME
+        // ═══════════════════════════════════════════════
+        function formatDeviceName(device) {
+            const names = {
+                'light1': 'Light 1',
+                'light2': 'Light 2',
+                'fan': 'Fan',
+                'socket': 'Socket'
+            };
+            return names[device] || device;
+        }
+
+        // ═══════════════════════════════════════════════
+        // UPDATE ACTIVE DEVICE COUNT
+        // ═══════════════════════════════════════════════
+        function updateActiveDeviceCount() {
+            let count = 0;
+            if (document.getElementById('light1Toggle').checked) count++;
+            if (document.getElementById('light2Toggle').checked) count++;
+            if (document.getElementById('fanToggle').checked) count++;
+            if (document.getElementById('socketToggle').checked) count++;
+            document.getElementById('activeDevices').textContent = `${count}/4`;
+        }
+
+        // ═══════════════════════════════════════════════
+        // SETUP FIREBASE LISTENERS
+        // ═══════════════════════════════════════════════
+        function setupListeners() {
+            // Device Status Listeners
+            const devices = ['light1', 'light2', 'fan', 'socket'];
+            
+            devices.forEach(device => {
+                onValue(ref(database, 'status/' + device), (snapshot) => {
+                    const state = snapshot.val();
+                    document.getElementById(device + 'Toggle').checked = state;
+                    document.getElementById(device + 'Status').textContent = state ? 'ON' : 'OFF';
+                    document.getElementById(device + 'Status').style.color = state ? '#4caf50' : '#888';
+                    
+                    // Fan icon animation
+                    if (device === 'fan') {
+                        const fanIcon = document.getElementById('fanIcon');
+                        fanIcon.style.animation = state ? 'spin 1s linear infinite' : 'none';
+                    }
+                    
+                    updateActiveDeviceCount();
+                });
+            });
+
+            // Sensor Listeners
+            onValue(ref(database, 'sensors/temperature'), (snapshot) => {
+                const temp = snapshot.val();
+                document.getElementById('temperature').textContent = temp ? temp.toFixed(1) + '°C' : '--°C';
+                
+                if (temp > 35) showAlert('🔥 High temperature warning!', 'danger');
+            });
+
+            onValue(ref(database, 'sensors/humidity'), (snapshot) => {
+                const humidity = snapshot.val();
+                document.getElementById('humidity').textContent = humidity ? humidity.toFixed(1) + '%' : '--%';
+            });
+
+            onValue(ref(database, 'sensors/lightLevel'), (snapshot) => {
+                const light = snapshot.val();
+                document.getElementById('lightLevel').textContent = light !== null ? light + '%' : '--%';
+            });
+
+            onValue(ref(database, 'sensors/motion'), (snapshot) => {
+                const motion = snapshot.val();
+                const motionEl = document.getElementById('motion');
+                motionEl.textContent = motion ? '🟢 YES' : '⚫ NO';
+                motionEl.style.color = motion ? '#4caf50' : '#888';
+                
+                if (motion) showAlert('🚶 Motion detected!', 'info');
+            });
+
+            // Auto Mode Listener
+            onValue(ref(database, 'settings/autoMode'), (snapshot) => {
+                const autoMode = snapshot.val();
+                document.getElementById('autoModeToggle').checked = autoMode;
+                document.getElementById('autoModeStatus').textContent = autoMode ? 'ENABLED' : 'DISABLED';
+                document.getElementById('autoModeStatus').style.color = autoMode ? '#4caf50' : '#888';
+            });
+
+            // Last Update Listener
+            onValue(ref(database, 'lastUpdate'), (snapshot) => {
+                const timestamp = snapshot.val();
+                if (timestamp) {
+                    document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
+                }
+            });
+
+            updateConnectionStatus(true);
+        }
+
+        // ═══════════════════════════════════════════════
+        // LOAD ALL DATA
+        // ═══════════════════════════════════════════════
+        function loadAllData() {
+            get(ref(database, '/')).then((snapshot) => {
+                if (snapshot.exists()) {
+                    console.log("✓ Data loaded successfully");
+                    updateConnectionStatus(true);
+                } else {
+                    console.log("Initializing database...");
+                    initializeDatabase();
+                }
+            }).catch((error) => {
+                console.error("Error:", error);
+                updateConnectionStatus(false);
+            });
+        }
+
+        // ═══════════════════════════════════════════════
+        // INITIALIZE DATABASE
+        // ═══════════════════════════════════════════════
+        function initializeDatabase() {
+            const initialData = {
+                devices: { light1: false, light2: false, fan: false, socket: false },
+                sensors: { temperature: 0, humidity: 0, lightLevel: 0, motion: false },
+                settings: { autoMode: false },
+                status: { light1: false, light2: false, fan: false, socket: false }
+            };
+
+            set(ref(database, '/'), initialData)
+                .then(() => {
+                    console.log("✓ Database initialized");
+                    showAlert('System initialized successfully!', 'success');
+                })
+                .catch((error) => console.error("Error:", error));
+        }
+
+        // ═══════════════════════════════════════════════
+        // LIVE CLOCK
+        // ═══════════════════════════════════════════════
+        function updateClock() {
+            const now = new Date();
+            const options = { 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit',
+                hour12: true 
+            };
+            document.getElementById('liveClock').textContent = now.toLocaleTimeString('en-US', options);
+        }
+
+        // ═══════════════════════════════════════════════
+        // INITIALIZE APP
+        // ═══════════════════════════════════════════════
+        function initApp() {
+            // Hide loading overlay after 2 seconds
+            setTimeout(() => {
+                document.getElementById('loadingOverlay').classList.add('hidden');
+            }, 2000);
+
+            // Setup listeners
+            setupListeners();
+            loadAllData();
+
+            // Update clock every second
+            updateClock();
+            setInterval(updateClock, 1000);
+
+            // Check connection every 5 seconds
+            setInterval(() => {
+                get(ref(database, 'lastUpdate')).then(() => {
+                    updateConnectionStatus(true);
+                }).catch(() => {
+                    updateConnectionStatus(false);
+                });
+            }, 5000);
+        }
+
+        // Start the application
+        initApp();
+    </script>
+
+    <style>
+        /* Fan spinning animation */
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</body>
+</html>
